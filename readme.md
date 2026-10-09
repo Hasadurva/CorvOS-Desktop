@@ -7,6 +7,9 @@
 ![Second Feature](preview-images/CorvOS-Desktop-Tiling.png)
 <hr style="height: 4px; border: none; background-color: #fe8019; margin: 20px 0;" />
 
+Blur? Overrated! Rounded corners? Childish! Animations? Waste of time!
+This RICE is entirely focused on minimal system overhead and maximum performance while still looking incredibly sleek. *At least it does to my eyes*.
+
 **Featuring:**
   - i3wm
   - Picom (minimalist setup)
