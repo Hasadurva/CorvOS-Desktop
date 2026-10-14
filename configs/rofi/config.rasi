@@ -1,9 +1,8 @@
 /**
  *
- * Author : Aditya Shakya (adi1090x)
- * Github : @adi1090x
- * 
- * Configuration For Rofi Version: 1.7.3
+ * CorvOS Rofi configuration
+ * Original configuration template attribution: Aditya Shakya (adi1090x)
+ * https://github.com/adi1090x/rofi
  **/
 
 configuration {
@@ -98,10 +97,10 @@ configuration {
     }
 
 	/*---------- Other settings ----------*/
-    timeout {
+/*    timeout {
       action: "kb-cancel";
       delay:  0;
-    }
+    }*/
 
 	/*---------- Keybindings ----------*/
 /*
@@ -179,27 +178,6 @@ configuration {
 	me-accept-custom: "Control+MouseDPrimary";
 */
 }
-//@theme "/usr/share/rofi/themes/Monokai.rasi"
-@theme "/usr/share/rofi/themes/gruvbox-dark.rasi"
-window {
-    width: 25%;
-}
-listview {
-    fixed-height: false;
-    dynamic: true;
-    lines: 6;
-}
-@theme "gruvbox-hyprland"
 
-entry {
-    placeholder: "";
-}
-
-window {
-    border: 2px;
-    border-color: #D79921;
-}
-
-textbox-prompt-colon {
-    enabled: false;
-}
+/* CorvOS custom theme. The bundled config is installed under ~/.config/rofi. */
+@theme "~/.config/rofi/themes/CorvOS-Theme.rasi"
