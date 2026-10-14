@@ -5,7 +5,7 @@ printf '%s\n' 'polyred' > /proc/$$/comm 2>/dev/null
 
 get_state() {
     display_match=${CORVOS_QREDSHIFT_DISPLAY:-}
-    qredshift -i 2>/dev/null | awk -F"|" -v display="$display_match" '$0 ~ /\\| T:/ && (display == "" || index($0, display)) { gsub(/.*T: /, "", $2); gsub(/K.*/, "", $2); gsub(/.*B: /, "", $3); gsub(/[[:space:]].*/, "", $3); gsub(/.*G: /, "", $4); gsub(/[[:space:]].*/, "", $4); print $2, $3, $4; exit }'
+    qredshift -i 2>/dev/null | awk -F"|" -v display="$display_match" '$0 ~ /\| T:/ && (display == "" || index($0, display)) { gsub(/.*T: /, "", $2); gsub(/K.*/, "", $2); gsub(/.*B: /, "", $3); gsub(/[[:space:]].*/, "", $3); gsub(/.*G: /, "", $4); gsub(/[[:space:]].*/, "", $4); print $2, $3, $4; exit }'
 }
 
 refresh() {
