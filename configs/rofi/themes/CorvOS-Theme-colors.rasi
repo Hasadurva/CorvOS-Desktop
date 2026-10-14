@@ -1,15 +1,9 @@
 /*
- * CorvOS-Theme color definitions
- * Customized for CorvOS by Hasadurva, 2026.
- *
- * Based on the Gruvbox Rofi configuration in:
- * https://github.com/LilAiluropoda/hyprland-gruvbox-theme
- * Related Rofi styling template by Aditya Shakya (adi1090x):
- * https://github.com/adi1090x/rofi
- * */
+ * CorvOS-Theme palette.
+ * Gruvbox-inspired dark colors, configured for CorvOS Desktop.
+ */
 
 * {
-    /* Gruvbox dark colors */
     background:     #282828;
     background-alt: #3c3836;
     foreground:     #ebdbb2;
@@ -18,7 +12,6 @@
     active:         #b8bb26;
     urgent:         #fb4934;
 
-    /* Main theme colors */
     main-bg:        @background;
     main-fg:        @foreground;
     main-br:        @border;
