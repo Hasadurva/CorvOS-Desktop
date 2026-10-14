@@ -79,7 +79,7 @@ done
 printf 'Backup saved to %s\n' "$backup"
 ```
 
-Keep the backup until you have tested the setup. The helper preserves original relative paths inside the backup folder and backs up only the listed paths, not unrelated files or your Zen history. To restore, copy the contents of the backup directory back into your home directory with the same relative paths, or restore only the affected paths. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
+Keep the backup until you have tested the setup. The helper preserves original relative paths inside the backup folder and backs up only the listed paths, not unrelated files or your Zen history. To restore all saved paths, run `cp -a "$backup/." "$HOME/"` from the same shell where the `backup` variable is still set, or copy only the affected paths back while preserving their relative paths. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
 
 ## 5. Copy configs, scripts, and assets
 
@@ -177,7 +177,7 @@ After checking the config and dependencies, reload or restart i3 using your usua
 - **Timer notifications:** `notify-send` provides desktop notifications; `paplay` provides the completion sound when available. The sound file path is `/usr/share/sounds/freedesktop/stereo/complete.oga`, which may not exist on every distribution.
 - **Date format errors:** `scripts/polybar-date` uses your system's current time locale, so date names follow your locale settings.
 - **btop CPU power readings:** the bundled btop config enables CPU watt readings, which may require additional privileges or a supported sensor. If you do not want to configure that, set `show_cpu_watts = False` in `~/.config/btop/btop.conf`.
-- **NET indicator:** the current helper checks for an IPv4 default route. An IPv6-only setup may need an adjustment to `scripts/polybar-net-status`.
+- **NET indicator:** the helper checks for either an IPv4 or IPv6 default route. A route means a network route is configured, not necessarily that an internet destination is reachable.
 - **Standalone Rofi helpers:** `rofi-audio` and `rofi-power-menu` are copied with the other scripts but are not bound to keys by the default i3 config. Add your own key bindings if you want to use them.
 
 For bundled asset sources and licences, see [ASSET-SOURCES.md](ASSET-SOURCES.md).
