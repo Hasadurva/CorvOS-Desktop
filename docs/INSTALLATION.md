@@ -180,7 +180,7 @@ After checking the config and dependencies, reload or restart i3 using your usua
 ## 8. Customise and troubleshoot
 
 - **No weather data:** the weather widget needs an internet connection and uses Open-Meteo. The default coordinates are broad starter coordinates for Germany. The `CORVOS_WEATHER_LAT`, `CORVOS_WEATHER_LON`, `CORVOS_WEATHER_TIMEZONE`, and `CORVOS_WEATHER_LOCATION` environment variables can override them. Make sure variables are inherited by i3/Polybar, or edit the defaults in `scripts/polybar-weather`.
-- **RED widget does not respond:** QRedshift must be installed and available as `qredshift`. The helper defaults to matching `DP-` in QRedshift's output. If your display is named differently, set `CORVOS_QREDSHIFT_DISPLAY` in the environment inherited by Polybar/i3, or edit the default in `scripts/polybar-qredshift`.
+- **RED widget does not respond:** QRedshift must be installed and available as `qredshift`. The helper reads the first display reported by QRedshift by default. To select a specific display, set `CORVOS_QREDSHIFT_DISPLAY` to a substring of its name in the environment inherited by Polybar/i3. Check names with `qredshift -i`.
 - **Power mode shows `???`:** check that `power-profiles-daemon` is installed, enabled, and supports your hardware.
 - **Volume keys do nothing:** check that `pactl` is installed and can connect to your PulseAudio-compatible audio server. `playerctl` and `brightnessctl` are used by their respective media and brightness key bindings.
 - **Timer notifications:** `notify-send` provides desktop notifications; `paplay` provides the completion sound when available. The sound file path is `/usr/share/sounds/freedesktop/stereo/complete.oga`, which may not exist on every distribution.
