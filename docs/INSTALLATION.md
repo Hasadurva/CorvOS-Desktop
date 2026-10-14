@@ -70,14 +70,16 @@ for path in \
   .local/share/fonts/weathericons-regular.otf .local/share/corvos/sounds
 do
   if [ -e "$HOME/$path" ]; then
-    cp -a "$HOME/$path" "$backup/"
+    destination="$backup/$(dirname "$path")"
+    mkdir -p "$destination"
+    cp -a "$HOME/$path" "$destination/"
   fi
 done
 
 printf 'Backup saved to %s\n' "$backup"
 ```
 
-Keep the backup until you have tested the setup. This helper backs up the installed CorvOS scripts and named font/sound files too, but it does not back up unrelated files in those directories or your Zen history. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
+Keep the backup until you have tested the setup. The helper preserves original relative paths inside the backup folder and backs up only the listed paths, not unrelated files or your Zen history. To restore, copy the contents of the backup directory back into your home directory with the same relative paths, or restore only the affected paths. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
 
 ## 5. Copy configs, scripts, and assets
 
@@ -134,7 +136,7 @@ fc-match "Noto Sans SemiCondensed"
 fc-match "JetBrains Mono Nerd Font"
 ```
 
-If a font name resolves to an unexpected substitute, install the intended font or update the corresponding font name in the config. The `font-0` Polybar setting uses a 5-point size in the current config; increase that value if the main bar text appears too small on your display.
+If a font name resolves to an unexpected substitute, install the intended font or update the corresponding font name in the config. The `font-0` Polybar setting uses an 8-point size. Adjust it for your display if needed.
 
 ## 6. Choose the monitor layout
 
@@ -169,16 +171,16 @@ After checking the config and dependencies, reload or restart i3 using your usua
 ## 8. Customise and troubleshoot
 
 - **No weather data:** the weather widget needs an internet connection and uses Open-Meteo. The default coordinates are broad starter coordinates for Germany. The `CORVOS_WEATHER_LAT`, `CORVOS_WEATHER_LON`, `CORVOS_WEATHER_TIMEZONE`, and `CORVOS_WEATHER_LOCATION` environment variables can override them. Make sure variables are inherited by i3/Polybar, or edit the defaults in `scripts/polybar-weather`.
-- **RED widget does not respond:** QRedshift must be installed and available as `qredshift`. The helper currently looks for a display name containing `DP-` in QRedshift's output; systems whose display names differ may need an adjustment to `scripts/polybar-qredshift`.
+- **RED widget does not respond:** QRedshift must be installed and available as `qredshift`. The helper defaults to matching `DP-` in QRedshift's output. If your display is named differently, set `CORVOS_QREDSHIFT_DISPLAY` in the environment inherited by Polybar/i3, or edit the default in `scripts/polybar-qredshift`.
 - **Power mode shows `???`:** check that `power-profiles-daemon` is installed, enabled, and supports your hardware.
 - **Volume keys do nothing:** check that `pactl` is installed and can connect to your PulseAudio-compatible audio server. `playerctl` and `brightnessctl` are used by their respective media and brightness key bindings.
 - **Timer notifications:** `notify-send` provides desktop notifications; `paplay` provides the completion sound when available. The sound file path is `/usr/share/sounds/freedesktop/stereo/complete.oga`, which may not exist on every distribution.
-- **Date format errors:** `scripts/polybar-date` uses `en_GB.UTF-8`. Change the locale in that script if your system does not have that locale generated.
+- **Date format errors:** `scripts/polybar-date` uses your system's current time locale, so date names follow your locale settings.
 - **btop CPU power readings:** the bundled btop config enables CPU watt readings, which may require additional privileges or a supported sensor. If you do not want to configure that, set `show_cpu_watts = False` in `~/.config/btop/btop.conf`.
 - **NET indicator:** the current helper checks for an IPv4 default route. An IPv6-only setup may need an adjustment to `scripts/polybar-net-status`.
 - **Standalone Rofi helpers:** `rofi-audio` and `rofi-power-menu` are copied with the other scripts but are not bound to keys by the default i3 config. Add your own key bindings if you want to use them.
 
-For file sources, attribution, and third-party licences, see [ASSET-SOURCES.md](ASSET-SOURCES.md). **Important:** the licence for the exact upstream Rofi theme source still needs confirmation. Do not redistribute the bundled adapted theme in a public release until that permission/licensing question is resolved.
+For bundled asset sources and licences, see [ASSET-SOURCES.md](ASSET-SOURCES.md).
 
 ## Rollback
 
