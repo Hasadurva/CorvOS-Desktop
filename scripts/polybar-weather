@@ -9,7 +9,9 @@ from datetime import datetime
 
 LAT = float(os.environ.get("CORVOS_WEATHER_LAT", "52.5200"))
 LON = float(os.environ.get("CORVOS_WEATHER_LON", "13.4050"))
-TIMEZONE = "Europe/Berlin"
+# Open-Meteo can detect the timezone from the selected coordinates.
+TIMEZONE = os.environ.get("CORVOS_WEATHER_TIMEZONE", "auto")
+WEATHER_LOCATION = os.environ.get("CORVOS_WEATHER_LOCATION", "LOCAL FORECAST")
 
 API = "https://api.open-meteo.com/v1/forecast"
 
@@ -138,7 +140,8 @@ def output_forecast():
     current_code = int(current["weather_code"])
 
     print("╭────────────────────────────────────╮")
-    print("│           WEATHER · SPANDAU        │")
+    title = f"WEATHER · {WEATHER_LOCATION}".upper()[:36]
+    print(f"│{title:^36}│")
     print("╰────────────────────────────────────╯")
     print()
     print(
