@@ -1,7 +1,9 @@
 #!/bin/sh
 
-MUTE_STATE=/tmp/dunst-polybar-muted
-REVIEW_STATE=/tmp/dunst-history-review
+STATE_DIR="${XDG_RUNTIME_DIR:-${HOME}/.cache/corvos/run}"
+mkdir -p "$STATE_DIR"
+MUTE_STATE="$STATE_DIR/dunst-polybar-muted"
+REVIEW_STATE="$STATE_DIR/dunst-history-review"
 
 update_indicator() {
     if [ -e "$MUTE_STATE" ]; then

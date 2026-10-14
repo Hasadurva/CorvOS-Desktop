@@ -19,7 +19,7 @@ separator_color = frame
 font = Noto Sans SemiCondensed 14
 
 [polybar-notification-indicator]
-script = /home/kraut/.local/bin/dunst-polybar-indicator.sh
+script = ~/.local/bin/corvos/dunst-polybar-indicator.sh
 
 [urgency_low]
 background = "#282828"
@@ -41,7 +41,7 @@ timeout = 0
 
 [pda_sound]
 summary = "*"
-script = /home/kraut/.config/dunst/pda-notify.sh
+script = ~/.local/bin/corvos/pda-notify.sh
 
 [polybar-mute]
 skip_display = true
