@@ -2,6 +2,7 @@
 import argparse
 import gzip
 import json
+import os
 import random
 import re
 import sys
@@ -9,7 +10,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 CORPUS_FILE = BASE_DIR / "zen_corpus.json.gz"
-HISTORY_FILE = BASE_DIR / "zen_history.json"
+STATE_HOME = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state"))
+HISTORY_FILE = STATE_HOME / "corvos" / "zen" / "zen_history.json"
 
 CYAN = "\033[36m"
 BOLD_YELLOW = "\033[1;33m"
@@ -25,6 +27,7 @@ def load_json(path, default):
 
 
 def save_json(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(data, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
