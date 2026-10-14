@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+CURRENT_SINK=$(pactl get-default-sink)
+
+SINKS=$(pactl list sinks | awk '
+    /^Sink #/ {id=$2; gsub("#", "", id)}
+    /Name:/ {name=$2}
+    /Description:/ {
+        $1=""; desc=$0; sub(/^ /, "", desc)
+        print id "|" name "|" desc
+    }
+')
+
+MENU=""
+declare -A SINK_MAP
+
+while IFS="|" read -r id name desc; do
+
+    case "$desc" in
+        "UMC202HD 192k Analog Stereo")
+            friendly="Headphones"
+            ;;
+        "Built-in Audio Analog Stereo")
+            friendly="Speakers"
+            ;;
+        *)
+            friendly="$desc"
+            ;;
+    esac
+
+    if [ "$name" == "$CURRENT_SINK" ]; then
+        label="●  $friendly"
+    else
+        label="   $friendly"
+    fi
+
+    MENU="${MENU}${label}"$'\n'
+    SINK_MAP["$label"]="$name"
+
+done <<< "$SINKS"
+
+CHOICE=$(printf '%s' "$MENU" |
+    rofi -dmenu -i -no-custom -p "Audio Output")
+
+if [ -n "$CHOICE" ] && [ -n "${SINK_MAP[$CHOICE]}" ]; then
+    NEW_SINK="${SINK_MAP[$CHOICE]}"
+
+    pactl set-default-sink "$NEW_SINK"
+
+    pactl list sink-inputs |
+        awk '/Sink Input #/ {print $3}' |
+        while read -r input; do
+            pactl move-sink-input "$input" "$NEW_SINK" 2>/dev/null || true
+        done
+fi

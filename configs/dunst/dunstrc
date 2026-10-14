@@ -1,0 +1,47 @@
+[global]
+monitor = 1
+follow = none
+sticky_history = false
+mouse_left_click = remove_current
+
+width = 350
+origin = top-right
+offset = 13x26
+
+padding = 10
+horizontal_padding = 12
+
+frame_width = 2
+frame_color = "#458588"
+
+separator_color = frame
+
+font = Noto Sans SemiCondensed 14
+
+[polybar-notification-indicator]
+script = /home/kraut/.local/bin/dunst-polybar-indicator.sh
+
+[urgency_low]
+background = "#282828"
+foreground = "#928374"
+frame_color = "#D79921"
+timeout = 15
+
+[urgency_normal]
+background = "#282828"
+foreground = "#EBDBB2"
+frame_color = "#D79921"
+timeout = 15
+
+[urgency_critical]
+background = "#282828"
+foreground = "#EBDBB2"
+frame_color = "#FB4934"
+timeout = 0
+
+[pda_sound]
+summary = "*"
+script = /home/kraut/.config/dunst/pda-notify.sh
+
+[polybar-mute]
+skip_display = true

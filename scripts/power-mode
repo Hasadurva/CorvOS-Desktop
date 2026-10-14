@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+case "${1:-status}" in
+    status)
+        current=$(powerprofilesctl get 2>/dev/null) || current=unknown
+
+        case "$current" in
+            power-saver)
+                printf '%s\n' '%{F#B8BB26}ECO%{F-}'
+                ;;
+            balanced)
+                printf '%s\n' '%{F#83A598}BAL%{F-}'
+                ;;
+            performance)
+                printf '%s\n' '%{F#FB4934}POW%{F-}'
+                ;;
+            *)
+                printf '%s\n' '%{F#D79921}???%{F-}'
+                ;;
+        esac
+        ;;
+
+    cycle)
+        current=$(powerprofilesctl get 2>/dev/null) || exit 1
+
+        case "$current" in
+            power-saver) next=balanced ;;
+            balanced) next=performance ;;
+            performance) next=power-saver ;;
+            *) exit 1 ;;
+        esac
+
+        powerprofilesctl set "$next"
+        ;;
+
+    cycle-back)
+        current=$(powerprofilesctl get 2>/dev/null) || exit 1
+
+        case "$current" in
+            power-saver) next=performance ;;
+            performance) next=balanced ;;
+            balanced) next=power-saver ;;
+            *) exit 1 ;;
+        esac
+
+        powerprofilesctl set "$next"
+        ;;
+
+    *)
+        exit 2
+        ;;
+esac

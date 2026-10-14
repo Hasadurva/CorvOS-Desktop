@@ -1,0 +1,6 @@
+#!/bin/sh
+if ip route show default | grep -q "^default"; then
+    printf "%s\n" "%{F#8EC07C}NET%{F-}"
+else
+    printf "%s\n" "%{F#FB4934}OFF%{F-}"
+fi

@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import random
+import re
+import sys
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+CORPUS_FILE = BASE_DIR / "zen_corpus.json"
+HISTORY_FILE = BASE_DIR / "zen_history.json"
+
+CYAN = "\033[36m"
+BOLD_YELLOW = "\033[1;33m"
+RESET = "\033[0m"
+
+
+def load_json(path, default):
+    try:
+        with path.open("r", encoding="utf-8") as fh:
+            return json.load(fh)
+    except FileNotFoundError:
+        return default
+
+
+def save_json(path, data):
+    path.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def load_corpus():
+    if not CORPUS_FILE.exists():
+        print(f"zen: corpus not found: {CORPUS_FILE}", file=sys.stderr)
+        sys.exit(1)
+
+    data = load_json(CORPUS_FILE, {})
+    poems = data.get("poems", [])
+    if not poems:
+        print("zen: corpus is empty.", file=sys.stderr)
+        sys.exit(1)
+
+    return data, poems
+
+
+def tag_flag_name(tag):
+    """Turn a corpus tag into a convenient CLI flag."""
+    slug = re.sub(r"[^a-z0-9]+", "-", tag.lower()).strip("-")
+    return f"--{slug}"
+
+
+def build_tag_flags(parser, poems):
+    """Add one shorthand --tag flag for every tag in the corpus."""
+    tags = sorted({tag for poem in poems for tag in poem.get("tags", [])})
+    flag_map = {}
+
+    for tag in tags:
+        flag = tag_flag_name(tag)
+        dest = f"tag_flag_{len(flag_map)}"
+        parser.add_argument(flag, dest=dest, action="store_true", help=argparse.SUPPRESS)
+        flag_map[dest] = tag
+
+    return flag_map
+
+
+def matches(poem, author=None, tag=None):
+    if author and poem["author"].lower() != author.lower():
+        return False
+    if tag and tag.lower() not in {t.lower() for t in poem.get("tags", [])}:
+        return False
+    return True
+
+
+def pick(poems, history, author=None, tag=None):
+    pool = [p for p in poems if matches(p, author, tag)]
+    if not pool:
+        if tag:
+            print(f"zen: no poems match tag '{tag}'.", file=sys.stderr)
+        elif author:
+            print(f"zen: no poems found for author '{author}'.", file=sys.stderr)
+        else:
+            print("zen: no poems match that filter.", file=sys.stderr)
+        sys.exit(2)
+
+    seen = set(history.get("seen", []))
+    unseen = [p for p in pool if p["id"] not in seen]
+
+    # Shuffle-bag behavior: don't repeat until the filtered pool is exhausted.
+    if not unseen:
+        pool_ids = {p["id"] for p in pool}
+        seen.difference_update(pool_ids)
+        history["seen"] = sorted(seen)
+        unseen = pool
+
+    poem = random.choice(unseen)
+    history.setdefault("seen", []).append(poem["id"])
+    history["last"] = poem["id"]
+    history["total_draws"] = int(history.get("total_draws", 0)) + 1
+    return poem
+
+
+def show(poem):
+    # Deliberately minimal output: poem + author, like the original script.
+    print()
+    print(f"{CYAN}{poem['text']}{RESET}")
+    print(f"\n{BOLD_YELLOW}— {poem['author']}{RESET}")
+    print()
+
+
+def stats(poems, history):
+    authors = {}
+    for poem in poems:
+        authors[poem["author"]] = authors.get(poem["author"], 0) + 1
+
+    tags = sorted({tag for poem in poems for tag in poem.get("tags", [])})
+    seen = set(history.get("seen", []))
+
+    print(f"Zen corpus: {len(poems)} poems")
+    print(f"Seen in current cycle: {len(seen)}")
+    print(f"Draws since installation: {history.get('total_draws', 0)}")
+
+    print("\nBy author:")
+    for author in sorted(authors):
+        print(f"  {author}: {authors[author]}")
+
+    print("\nTag flags:")
+    print("  " + " ".join(tag_flag_name(tag) for tag in tags))
+
+
+def reset(history):
+    total_draws = int(history.get("total_draws", 0))
+    history.clear()
+    history.update({"seen": [], "total_draws": total_draws, "last": None})
+    save_json(HISTORY_FILE, history)
+    print("Zen cycle reset. The next poem will be new to the cycle.")
+
+
+def main():
+    data, poems = load_corpus()
+
+    parser = argparse.ArgumentParser(
+        description="A persistent random Zen poetry oracle."
+    )
+    parser.add_argument("--author", help="only draw from one author")
+    parser.add_argument("--tag", help="only draw poems with a given tag")
+    parser.add_argument("--stats", action="store_true", help="show corpus and history stats")
+    parser.add_argument("--reset", action="store_true", help="reset the current no-repeat cycle")
+
+    tag_flags = build_tag_flags(parser, poems)
+    args = parser.parse_args()
+
+    selected_flags = [
+        tag for dest, tag in tag_flags.items()
+        if getattr(args, dest)
+    ]
+
+    if args.tag and selected_flags:
+        parser.error("use either --tag or a shorthand tag flag, not both")
+    if len(selected_flags) > 1:
+        parser.error("use only one shorthand tag flag at a time")
+
+    selected_tag = args.tag or (selected_flags[0] if selected_flags else None)
+
+    history = load_json(
+        HISTORY_FILE,
+        {"seen": [], "total_draws": 0, "last": None},
+    )
+    if not isinstance(history.get("seen"), list):
+        history["seen"] = []
+
+    if args.stats:
+        stats(poems, history)
+        return
+
+    if args.reset:
+        reset(history)
+        return
+
+    poem = pick(poems, history, args.author, selected_tag)
+    save_json(HISTORY_FILE, history)
+    show(poem)
+
+
+if __name__ == "__main__":
+    main()

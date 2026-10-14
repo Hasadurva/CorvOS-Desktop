@@ -1,0 +1,91 @@
+#!/bin/sh
+
+# Show up as "polyred" in process monitors while this helper runs.
+printf '%s\n' 'polyred' > /proc/$$/comm 2>/dev/null
+
+get_state() {
+    qredshift -i 2>/dev/null | awk -F"|" "/DP-/{gsub(/.*T: /,\"\",\$2); gsub(/K.*/,\"\",\$2); gsub(/.*B: /,\"\",\$3); gsub(/\\. *G:.*/,\"\",\$3); gsub(/.*G: /,\"\",\$4); print \$2, \$3, \$4; exit}"
+}
+
+refresh() {
+    pid=$1
+
+    case "$pid" in
+        ''|*[!0-9]*)
+            return 0
+            ;;
+    esac
+
+    /usr/bin/polybar-msg -p "$pid" action qredshift hook 0 >/dev/null 2>&1
+}
+
+case "$1" in
+
+    start)
+    # Boot state: blue-light filter ON, brightness 100%.
+    qredshift -t 5500 -b 1.00 -g 1.00
+    /usr/bin/polybar-msg action qredshift hook 0 >/dev/null 2>&1
+    ;;
+
+    toggle)
+        pid=$2
+
+        set -- $(get_state)
+
+        temp=$1
+        bright=$2
+        gamma=$3
+
+        if [ "$temp" = "5500" ]; then
+            # OFF = normal color temperature + brightness reset.
+            qredshift -t 6500 -b 1.00 -g 1.00
+        else
+            # ON = 5500K + brightness reset to 100%.
+            qredshift -t 5500 -b 1.00 -g 1.00
+        fi
+
+        refresh "$pid"
+        ;;
+
+    up|down)
+        action=$1
+        pid=$2
+
+        set -- $(get_state)
+
+        temp=$1
+        bright=$2
+        gamma=$3
+
+        # No brightness adjustment while RED is OFF.
+        if [ "$temp" != "5500" ]; then
+            exit 0
+        fi
+
+        if [ "$action" = "up" ]; then
+            delta=0.05
+        else
+            delta=-0.05
+        fi
+
+        new_bright=$(awk -v b="$bright" -v d="$delta" 'BEGIN { b += d; if (b > 1) b = 1; if (b < 0.1) b = 0.1; printf "%.2f", b }')
+
+        qredshift -t "$temp" -b "$new_bright" -g "$gamma"
+
+        refresh "$pid"
+        ;;
+
+    *)
+        set -- $(get_state)
+
+        temp=$1
+        bright=$2
+
+        if [ "$temp" = "5500" ]; then
+            printf "%d%%\n" "$(awk -v b="$bright" 'BEGIN { printf "%.0f", b * 100 }')"
+        else
+            printf "OFF\n"
+        fi
+        ;;
+
+esac
