@@ -79,7 +79,16 @@ done
 printf 'Backup saved to %s\n' "$backup"
 ```
 
-Keep the backup until you have tested the setup. The helper preserves original relative paths inside the backup folder and backs up only the listed paths, not unrelated files or your Zen history. To restore all saved paths, run `cp -a "$backup/." "$HOME/"` from the same shell where the `backup` variable is still set, or copy only the affected paths back while preserving their relative paths. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
+Keep the backup until you have tested the setup. The helper preserves original relative paths inside the backup folder and backs up only the listed paths, not unrelated files or your Zen history.
+
+To restore all saved paths later, set `backup` to the directory printed by the backup command, then copy the saved files back:
+
+```sh
+backup="$HOME/corvos-config-backup-YYYYMMDD-HHMMSS" # Replace with the actual timestamped directory
+cp -a "$backup/." "$HOME/"
+```
+
+This restores only the paths saved in the backup, but it may overwrite the corresponding CorvOS files. You can also restore only the affected paths. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
 
 ## 5. Copy configs, scripts, and assets
 
