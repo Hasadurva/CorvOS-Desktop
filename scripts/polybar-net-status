@@ -1,5 +1,6 @@
 #!/bin/sh
-if ip route show default | grep -q "^default"; then
+
+if ip -4 route show default 2>/dev/null | grep -q . || ip -6 route show default 2>/dev/null | grep -q .; then
     printf "%s\n" "%{F#8EC07C}NET%{F-}"
 else
     printf "%s\n" "%{F#FB4934}OFF%{F-}"
