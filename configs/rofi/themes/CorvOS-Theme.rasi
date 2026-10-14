@@ -6,9 +6,7 @@
  * https://github.com/LilAiluropoda/hyprland-gruvbox-theme
  * The Rofi launcher template retains attribution to Aditya Shakya (adi1090x):
  * https://github.com/adi1090x/rofi
- *
- * SPDX-License-Identifier: GPL-3.0-only
- */
+ * */
 
 @import "CorvOS-Theme-colors.rasi"
 
