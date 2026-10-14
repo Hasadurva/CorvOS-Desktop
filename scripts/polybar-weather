@@ -7,11 +7,12 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 
-LAT = float(os.environ.get("CORVOS_WEATHER_LAT", "52.5200"))
-LON = float(os.environ.get("CORVOS_WEATHER_LON", "13.4050"))
+# Country-level starter coordinates; install.sh can ask users for their location.
+LAT = float(os.environ.get("CORVOS_WEATHER_LAT", "51.1657"))
+LON = float(os.environ.get("CORVOS_WEATHER_LON", "10.4515"))
 # Open-Meteo can detect the timezone from the selected coordinates.
 TIMEZONE = os.environ.get("CORVOS_WEATHER_TIMEZONE", "auto")
-WEATHER_LOCATION = os.environ.get("CORVOS_WEATHER_LOCATION", "LOCAL FORECAST")
+WEATHER_LOCATION = os.environ.get("CORVOS_WEATHER_LOCATION", "GERMANY")
 
 API = "https://api.open-meteo.com/v1/forecast"
 
