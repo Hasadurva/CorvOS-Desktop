@@ -30,7 +30,6 @@ exec --no-startup-id sh -c 'sleep 5; picom'
 exec --no-startup-id dunst
 exec --no-startup-id sh -c 'sleep 2; ~/.local/bin/corvos/dunst-polybar-indicator.sh startup'
 exec --no-startup-id polybar corvos
-exec --no-startup-id polybar secondary
 exec --no-startup-id sh -c "sleep 5; ~/.local/bin/corvos/polybar-qredshift start"
 
 # Applications
