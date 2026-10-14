@@ -65,7 +65,9 @@ mkdir -p "$backup"
 
 for path in \
   .config/i3 .config/polybar .config/rofi .config/dunst \
-  .config/picom .config/btop .config/xsettingsd .Xresources
+  .config/picom .config/btop .config/xsettingsd .Xresources \
+  .local/bin/corvos .local/share/fonts/corvos.otf \
+  .local/share/fonts/weathericons-regular.otf .local/share/corvos/sounds
 do
   if [ -e "$HOME/$path" ]; then
     cp -a "$HOME/$path" "$backup/"
@@ -75,7 +77,7 @@ done
 printf 'Backup saved to %s\n' "$backup"
 ```
 
-Keep the backup until you have tested the setup. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
+Keep the backup until you have tested the setup. This helper backs up the installed CorvOS scripts and named font/sound files too, but it does not back up unrelated files in those directories or your Zen history. If you already manage these configs with Git, make sure the current state is committed or otherwise recoverable.
 
 ## 5. Copy configs, scripts, and assets
 
@@ -176,7 +178,7 @@ After checking the config and dependencies, reload or restart i3 using your usua
 - **NET indicator:** the current helper checks for an IPv4 default route. An IPv6-only setup may need an adjustment to `scripts/polybar-net-status`.
 - **Standalone Rofi helpers:** `rofi-audio` and `rofi-power-menu` are copied with the other scripts but are not bound to keys by the default i3 config. Add your own key bindings if you want to use them.
 
-For file sources, attribution, and third-party licences, see [ASSET-SOURCES.md](ASSET-SOURCES.md).
+For file sources, attribution, and third-party licences, see [ASSET-SOURCES.md](ASSET-SOURCES.md). **Important:** the licence for the exact upstream Rofi theme source still needs confirmation. Do not redistribute the bundled adapted theme in a public release until that permission/licensing question is resolved.
 
 ## Rollback
 
