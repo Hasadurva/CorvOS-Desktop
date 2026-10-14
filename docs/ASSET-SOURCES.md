@@ -1,6 +1,6 @@
 # Third-party assets and licenses
 
-CorvOS bundles the weather font used by its Polybar weather module. The Rofi application icon theme remains a separate user-installed dependency.
+CorvOS bundles the weather font and the customized Rofi theme used by its desktop configuration. The Gruvbox Plus application icon theme remains a separate user-installed dependency.
 
 ## Weather Icons font (included)
 
@@ -11,7 +11,18 @@ CorvOS includes the unmodified OpenType font from [Erik Flowers' Weather Icons p
 - **Upstream font source:** [weathericons-regular.otf](https://github.com/erikflowers/weather-icons/blob/master/_docs/font-source/weathericons-regular.otf)
 - **Credits:** Font and CSS work by Erik Flowers; original icon designs by Lukas Bischoff.
 
-The Polybar configuration uses the `Weather Icons` font family. The weather script maps Open-Meteo weather codes to glyphs from this font, so there is no Cinnamon Weather font dependency and users do not need to source a separate weather font.
+The Polybar configuration uses the `Weather Icons` font family. The weather script maps Open-Meteo weather codes to glyphs from this font, so users do not need to source a separate weather font.
+
+## CorvOS Rofi theme (included)
+
+- **Bundled theme:** `configs/rofi/themes/CorvOS-Theme.rasi`
+- **Bundled palette:** `configs/rofi/themes/CorvOS-Theme-colors.rasi`
+- **Adaptation:** Customized for CorvOS by Hasadurva in 2026.
+- **Source repository:** [LilAiluropoda/hyprland-gruvbox-theme](https://github.com/LilAiluropoda/hyprland-gruvbox-theme)
+- **Original Rofi template attribution:** Aditya Shakya (adi1090x), [adi1090x/rofi](https://github.com/adi1090x/rofi).
+- **License:** The Rofi template repository publishes its files under GPL-3.0. The CorvOS theme files identify this licence and retain upstream attribution.
+
+The bundled theme is adapted for CorvOS, including changes to layout, colors, spacing, and window styling. The main theme imports its companion palette by relative filename. The Rofi configuration selects `~/.config/rofi/themes/CorvOS-Theme.rasi`; install both theme files into `~/.config/rofi/themes/`.
 
 ## Rofi application icons (not included)
 
