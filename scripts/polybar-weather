@@ -15,21 +15,22 @@ WEATHER_LOCATION = os.environ.get("CORVOS_WEATHER_LOCATION", "LOCAL FORECAST")
 
 API = "https://api.open-meteo.com/v1/forecast"
 
+# Glyphs from the Weather Icons font (SIL OFL 1.1).
 GLYPHS = {
-    "day-clear": "\ue000",
-    "night-clear": "\ue001",
-    "day-cloudy": "\ue002",
-    "night-cloudy": "\ue003",
-    "day-fog": "\ue004",
-    "night-fog": "\ue005",
-    "day-showers": "\ue006",
-    "night-showers": "\ue007",
-    "day-rain": "\ue008",
-    "night-rain": "\ue009",
-    "day-snow": "\ue00a",
-    "night-snow": "\ue00b",
-    "day-thunder": "\ue00c",
-    "night-thunder": "\ue00d",
+    "day-clear": "\uf00d",       # wi-day-sunny
+    "night-clear": "\uf02e",     # wi-night-clear
+    "day-cloudy": "\uf002",      # wi-day-cloudy
+    "night-cloudy": "\uf031",    # wi-night-cloudy
+    "day-fog": "\uf003",         # wi-day-fog
+    "night-fog": "\uf04a",       # wi-night-fog
+    "day-showers": "\uf009",     # wi-day-showers
+    "night-showers": "\uf037",   # wi-night-showers
+    "day-rain": "\uf008",        # wi-day-rain
+    "night-rain": "\uf036",      # wi-night-rain
+    "day-snow": "\uf00a",        # wi-day-snow
+    "night-snow": "\uf038",      # wi-night-snow
+    "day-thunder": "\uf010",     # wi-day-thunderstorm
+    "night-thunder": "\uf03b",   # wi-night-alt-thunderstorm
 }
 
 DESCRIPTIONS = {
