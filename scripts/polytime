@@ -9,7 +9,11 @@ import time
 from datetime import datetime
 from threading import Event
 
-RUNTIME = os.environ.get("XDG_RUNTIME_DIR") or "/tmp"
+RUNTIME = os.environ.get("XDG_RUNTIME_DIR") or os.path.join(
+    os.environ.get("XDG_CACHE_HOME", os.path.join(os.path.expanduser("~"), ".cache")),
+    "corvos",
+    "run",
+)
 STATE = os.path.join(RUNTIME, "polytime.state")
 wake = Event()
 running = True
