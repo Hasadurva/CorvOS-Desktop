@@ -63,4 +63,6 @@ The NET indicator checks for a default network route. It works independently of 
 
 **Installation**
 
-CorvOS is still being prepared for portable installation. A guided installer with component selection, dependency checks and backup support is planned. Existing configuration files should be backed up before manually installing or replacing them. Don't sue me, I barely know what I am doing.
+CorvOS is still being prepared for portable installation. A guided installer with component selection, dependency checks and backup support is planned. Existing configuration files should be backed up before manually installing or replacing them. A simple manual installation guide is in **/docs/INSTALLATION.md**
+
+If you break something, please don't sue me, I barely know what I am doing :)
