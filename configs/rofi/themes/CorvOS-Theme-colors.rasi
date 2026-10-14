@@ -6,9 +6,7 @@
  * https://github.com/LilAiluropoda/hyprland-gruvbox-theme
  * Related Rofi styling template by Aditya Shakya (adi1090x):
  * https://github.com/adi1090x/rofi
- *
- * SPDX-License-Identifier: GPL-3.0-only
- */
+ * */
 
 * {
     /* Gruvbox dark colors */
